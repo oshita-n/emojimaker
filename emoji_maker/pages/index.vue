@@ -51,7 +51,7 @@ export default {
     async post({src_txt}) {        
         // 取得先のURL
         //const url = 'http://192.168.2.226:5000/mecab/v1/parse-neologd';
-        const url = 'https://3.238.145.71:8888';
+        const url = 'https://3.239.235.148:8888';
         const response = await axios.post(url, {"sentence": src_txt},{ header : { 'Content-Type': 'application/json' }})
         if(response.data['result'])
           this.parse_txt = response.data['result']
