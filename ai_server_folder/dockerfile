@@ -1,0 +1,45 @@
+FROM ubuntu:18.04
+
+# basic libs
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install -y wget build-essential gcc zlib1g-dev
+
+# latest openssl for python
+WORKDIR /root/
+RUN wget https://www.openssl.org/source/openssl-1.1.1d.tar.gz \
+        && tar zxf openssl-1.1.1d.tar.gz \
+        && cd openssl-1.1.1d \
+        && ./config \
+        && make \
+        && make install
+
+# python
+WORKDIR /root/
+RUN wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tgz \
+        && tar zxf Python-3.6.8.tgz \
+        && cd Python-3.6.8 \
+        && ./configure \
+        && make altinstall
+ENV PYTHONIOENCODING "utf-8"
+
+WORKDIR /usr/local/bin/
+RUN ln -s python3.6 python
+RUN ln -s pip3.6 pip
+
+# mecab
+RUN apt-get install -y mecab libmecab-dev mecab-ipadic mecab-ipadic-utf8
+
+RUN apt-get update \
+  && apt-get install -y python3 python3-pip curl git sudo cron swig \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY . /opt/api
+WORKDIR /opt/api
+
+RUN pip3 install -r requirements.txt
+
+RUN git clone https://github.com/facebookresearch/fastText.git
+RUN cd fastText && pip3 install .
+
+CMD ["python3", "ai_server.py"]

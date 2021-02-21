@@ -49,30 +49,13 @@ export default {
 
   methods: {
     async post({src_txt}) {        // 取得先のURL
-        const url = 'http://192.168.2.226:5000/mecab/v1/parse-neologd';
+        //const url = 'http://192.168.2.226:5000/mecab/v1/parse-neologd';
+        const url = 'http://localhost:8888'
         const response = await axios.post(url, {"sentence": src_txt},{ header : { 'Content-Type': 'application/json' }})
-        var results = response.data.results
-        console.log(results)
-        if(results.some(txt => txt === "お願い"))
-          this.parse_txt = src_txt + "🙏"
-        else if(results.some(txt => txt === "よろしくお願いします"))
-          this.parse_txt = src_txt + "🙏"
-        else if(results.some(txt => txt === "よろしく"))
-          this.parse_txt = src_txt + "🙏"
-        else if(results.some(txt => txt === "おねがい"))
-          this.parse_txt = src_txt + "🙏"
-        else if(results.some(txt => txt === "よろしくお願いします"))
-          this.parse_txt = src_txt + "🙏"
-        else if(results.some(txt => txt === "がんばり"))
-          this.parse_txt = src_txt + "💪"
-        else if(results.some(txt => txt === "がんばろう"))
-          this.parse_txt = src_txt + "💪"
-        else if(results.some(txt => txt === "頑張ろ"))
-          this.parse_txt = src_txt + "💪"
-        else if(results.some(txt => txt === "頑張り"))
-          this.parse_txt = src_txt + "💪"
+        if(response.data['result'])
+          this.parse_txt = response.data['result']
         else
-          this.parse_txt = "入力した一文には絵文字をつけられませんでした。"
+          this.parse_txt = "文をもう少し長くしてもう一度入力してください。"
       },
   }
 }
