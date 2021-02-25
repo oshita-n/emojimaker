@@ -18,4 +18,4 @@ if __name__ == "__main__":
     model = fasttext.load_model("model_emoji.bin")
     m = MeCab.Tagger("-Owakati")
     csv = pd.read_csv("data.csv", header=None)
-    app.run(debug=True, host='0.0.0.0', port=8888, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=8888, threaded=True, ssl_context='adhoc')
